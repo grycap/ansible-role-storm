@@ -4,14 +4,22 @@
 Apache Storm Role
 ===================
 
-Install Apache Storm (Only working for Ubuntu 16)
+Install [Apache Storm](https://storm.apache.org/).  
+This role has been tested only with Ubuntu 16. Is not ensured that it will work with other systems.
 
 Role Variables
 --------------
 
-The variables that can be passed to this role and a brief description about them are as follows.
+Variables used in this role:
 
+	# Install info
 	storm_version: "1.0.2"
+	## System info
+	storm_system_user_name: storm
+	storm_system_group_name: storm
+	storm_system_comment: Storm system user
+	storm_system_shell: /bin/false
+	storm_system_user_home: "/var/lib/{{ storm_system_user_name }}"
 
 Example Playbook
 ----------------
