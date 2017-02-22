@@ -1,0 +1,92 @@
+- name: Create the system groups
+  group:
+    name: "storm"
+    state: "present"
+    system: "yes"
+
+- name: Create system users
+  user:
+    name: "{{ storm_system_user_name }}"
+    group: "{{ storm_system_group_name }}"
+    comment: "{{ storm_system_comment }}"
+    shell: "{{ storm_system_shell }}"
+    system: "yes"
+    createhome: "no"
+    home: "{{ storm_system_user_home }}"
+
+- name: Create dirs
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - { path: "/var/storm", mode: "0775", owner: "storm", group: "storm" }
+    - { path: "/var/log/storm", mode: "0775", owner: "storm", group: "storm" }
+
+- name: Download storm
+  get_url:
+    url: "http://apache.mirrors.tds.net/storm/apache-storm-{{ storm_version }}/apache-storm-{{ storm_version }}.tar.gz"
+    dest: "/root/apache-storm-{{ storm_version }}.tar.gz"
+    mode: 0440
+
+- name: Unarchive storm
+  unarchive:
+    src: "/root/apache-storm-{{ storm_version }}.tar.gz"
+    dest: "/opt"
+    creates: "/opt/apache-storm-{{ storm_version }}"
+    copy: "no"
+
+- name: Create storm symbolic links
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+  with_items:
+    - src: "/opt/apache-storm-{{ storm_version }}"
+      dest: "/opt/storm"
+    - src: "/var/log/storm"
+      dest: "/opt/storm/logs"
+
+- name: Drop storm Config(s)
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode|default('0644') }}"
+  with_items:
+    - src: "storm.yaml.j2"
+      dest: "/opt/apache-storm-{{ storm_version }}/conf/storm.yaml"
+      owner: "storm"
+      group: "storm"
+    - src: "storm-nimbus.service.j2"
+      dest: "/etc/systemd/system/storm-nimbus.service"
+      owner: "root"
+      group: "root"
+    - src: "storm-supervisor.service.j2"
+      dest: "/etc/systemd/system/storm-supervisor.service"
+      owner: "root"
+      group: "root"
+  register: storm_config
+
+- name: Ensure storm launches on boot
+  service:
+    name: "{{ item }}"
+    enabled: "yes"
+  with_items:
+    - "storm-nimbus"
+    - "storm-supervisor"
+
+- name: Restart storm nimbus
+  service:
+    name: "storm-nimbus"
+    state: "restarted"
+  when: storm_config.changed
+
+- name: Restart storm supervisor
+  service:
+    name: "storm-supervisor"
+    state: "restarted"
+  when: storm_config.changed

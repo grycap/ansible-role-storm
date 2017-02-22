@@ -1,0 +1,8 @@
+---
+storm_version: "1.0.2"
+## System info
+storm_system_user_name: storm
+storm_system_group_name: storm
+storm_system_comment: Storm system user
+storm_system_shell: /bin/false
+storm_system_user_home: "/var/lib/{{ storm_system_user_name }}"
