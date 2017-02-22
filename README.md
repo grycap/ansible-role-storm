@@ -11,6 +11,7 @@ Role Variables
 
 The variables that can be passed to this role and a brief description about them are as follows.
 
+	storm_version: "1.0.2"
 
 Example Playbook
 ----------------
