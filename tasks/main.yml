@@ -1,8 +1,10 @@
+---
 - name: Create the system groups
   group:
     name: "storm"
     state: "present"
     system: "yes"
+  register: storm_group_created
 
 - name: Create system users
   user:
@@ -13,6 +15,7 @@
     system: "yes"
     createhome: "no"
     home: "{{ storm_system_user_home }}"
+  when: kafka_group_created.changed    
 
 - name: Create dirs
   file:
