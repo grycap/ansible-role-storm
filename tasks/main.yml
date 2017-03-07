@@ -27,7 +27,7 @@
 
 - name: Download storm
   get_url:
-    url: "http://apache.rediris.es/storm/apache-storm-{{ storm_version }}/apache-storm-{{ storm_version }}.tar.gz"
+    url: "{{storm_download_mirror}}/apache-storm-{{ storm_version }}/apache-storm-{{ storm_version }}.tar.gz"
     dest: "/root/apache-storm-{{ storm_version }}.tar.gz"
     mode: 0440
 
