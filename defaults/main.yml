@@ -1,6 +1,6 @@
 ---
 storm_download_mirror: "http://apache.rediris.es/storm"
-storm_version: "1.0.2"
+storm_version: "1.2.1"
 ## System info
 storm_system_user_name: storm
 storm_system_group_name: storm
