@@ -1,0 +1,11 @@
+[Unit]
+Description={{ item.service }} service
+[Service]
+Type=simple
+ExecStart=/usr/bin/storm {{ item.service }}
+Restart=always
+PIDFile=/var/run/%i.pid
+User=storm
+WorkingDirectory=/opt/storm
+[Install]
+WantedBy=multi-user.target

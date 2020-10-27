@@ -1,0 +1,10 @@
+nimbus.host: "{{ ansible_hostname }}"
+storm.local.dir: "/opt/storm/local"
+storm.log.dir: "/opt/storm/log"
+storm.zookeeper.servers:
+    - "localhost"
+worker.heap.memory.mb: 5000
+supervisor.slots.ports:
+{%- for n in range(0, num_supervisors|int - 1) -%}
+    - {{ 6700 + n }}
+{%- endfor -%}

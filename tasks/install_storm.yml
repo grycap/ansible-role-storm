@@ -1,0 +1,32 @@
+---
+- name: Create the system groups
+  group:
+    name: "{{ storm_system_group_name }}"
+    state: present
+    system: yes
+
+- name: Create system users
+  user:
+    name: "{{ storm_system_user_name }}"
+    group: "{{ storm_system_group_name }}"
+    system: yes
+    createhome: no
+
+- name: Download storm
+  get_url:
+    url: "{{storm_download_mirror}}/apache-storm-{{ storm_version }}/apache-storm-{{ storm_version }}.tar.gz"
+    dest: "/tmp/apache-storm-{{ storm_version }}.tar.gz"
+    mode: 0440
+
+- name: Unarchive storm
+  unarchive:
+    src: "/tmp/apache-storm-{{ storm_version }}.tar.gz"
+    dest: "/opt"
+    creates: "/opt/apache-storm-{{ storm_version }}"
+    remote_src: yes
+
+- name: Create storm symbolic link
+  file:
+    src: "/opt/apache-storm-{{ storm_version }}"
+    dest: "/opt/storm"
+    state: link

@@ -1,0 +1,47 @@
+---
+
+- name: Drop storm Config(s)
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode|default('0644') }}"
+  with_items:
+    - src: "storm_wn.yaml.j2"
+      dest: "/opt/storm/conf/storm.yaml"
+      owner: "{{ storm_system_user_name }}"
+      group: "{{ storm_system_group_name }}"
+      service: ""
+    - src: "storm.service.j2"
+      dest: "/etc/systemd/system/storm-supervisor.service"
+      owner: "root"
+      group: "root"
+      service: "supervisor"
+    - src: "storm.service.j2"
+      dest: "/etc/systemd/system/storm-logviewer.service"
+      owner: "root"
+      group: "root"
+      service: "logviewer"
+  register: storm_config
+
+- name: Start {{item}} service 
+  systemd:
+    state: started
+    name: "{{ item }}.service"
+    daemon_reload: yes
+    enabled: yes 
+  with_items:
+    - storm-logviewer
+    - storm-supervisor
+
+- name: Restart {{item}} service 
+  systemd:
+    state: restarted
+    name: "{{ item }}.service"
+    daemon_reload: yes
+    enabled: yes 
+  with_items:
+    - storm-logviewer
+    - storm-supervisor
+  when: storm_config.changed
