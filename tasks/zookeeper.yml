@@ -34,7 +34,6 @@
     owner: "{{ zk_system_user_name }}"
     group: "{{ zk_system_group_name }}"
     state: link
-    remote_src: yes
 
 - name: Copy a new zk conf
   copy:
