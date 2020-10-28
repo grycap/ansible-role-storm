@@ -52,3 +52,11 @@
     owner: "{{ storm_system_user_name }}"
     group: "{{ storm_system_group_name }}"
     mode: 0755
+
+- name: Create /opt/storm/local
+  file:
+    path: "/opt/storm/local"
+    state: directory
+    owner: "{{ storm_system_user_name }}"
+    group: "{{ storm_system_group_name }}"
+    mode: 0755
