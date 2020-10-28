@@ -43,6 +43,7 @@
     owner: "{{ zk_system_user_name }}"
     group: "{{ zk_system_group_name }}"
     remote_src: yes
+    force: no
 
 - name: Set to disable the AdminServer
   lineinfile:
