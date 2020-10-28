@@ -12,6 +12,18 @@
     system: yes
     createhome: no
 
+- name: Install Java 8 in Ubuntu/Debian
+  apt:
+    name: openjdk-8-jdk
+    state: present
+    when: ansible_os_family == "Debian"
+
+- name: Install Java 8 in RedHat/CentOS
+  yum:
+    name: java-1.8.0-openjdk
+    state: present
+    when: ansible_os_family == "RedHat"
+
 - name: Download storm
   get_url:
     url: "{{storm_download_mirror}}/apache-storm-{{ storm_version }}/apache-storm-{{ storm_version }}.tar.gz"
