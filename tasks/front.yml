@@ -55,3 +55,20 @@
     - storm-logviewer
     - storm-nimbus
     - storm-ui
+
+- name: Open ports in firewalld in RedHat/CentOS
+  firewalld:
+    port: 8080/tcp
+    permanent: true
+    state: enabled
+    zone: public
+    immediate: true
+  when: ansible_os_family == "RedHat"
+  ignore_errors: yes
+
+- name: reload service firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
+  when: ansible_os_family == "RedHat"
+  ignore_errors: yes
