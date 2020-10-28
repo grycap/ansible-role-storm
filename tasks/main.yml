@@ -1,5 +1,5 @@
 - name: Include Install Storm tasks
-  include_tasks: install_storm.yml"
+  include_tasks: install_storm.yml
 
 - name: Include "{{storm_type_of_node}}" tasks
   include_tasks: "{{storm_type_of_node}}.yml"
