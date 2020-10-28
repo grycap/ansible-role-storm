@@ -1,6 +1,6 @@
 ---
 - name: Include ZK tasks
-  include_tasks: zookeeper.yml"
+  include_tasks: zookeeper.yml
 
 - name: Drop storm Config(s)
   template:
