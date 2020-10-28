@@ -1,10 +1,10 @@
-- name: Create the system groups
+- name: Create the zookeeper system group
   group:
     name: "{{ zk_system_group_name }}"
     state: present
     system: yes
 
-- name: Create system users
+- name: Create th zookeeper system user
   user:
     name: "{{ zk_system_user_name }}"
     group: "{{ zk_system_group_name }}"
@@ -19,14 +19,16 @@
     group: "{{ zk_system_group_name }}"
     timeout: 600
 
-- unarchive:
+- name: Unarchive Zookeeper
+  unarchive:
     src: /tmp/apache-zookeeper-{{ zk_version }}-bin.tar.gz
     dest: /opt
     owner: "{{ zk_system_user_name }}"
     group: "{{ zk_system_group_name }}"
     remote_src: yes
 
-- file:
+- name: Create storm symbolic link on /opt/zookeeper
+  file:
     src: "/opt/apache-zookeeper-{{ zk_version }}-bin/"
     dest: /opt/zookeeper
     owner: "{{ zk_system_user_name }}"
@@ -45,7 +47,8 @@
 - name: Set to disable the AdminServer
   lineinfile:
     path: /opt/zookeeper/conf/zoo.cfg
-    line:  admin.enableServer=false
+    line: 'admin.enableServer=false'
+    regexp: '^admin.enableServer='
 
 - name: Copy ZK service file
   template:

@@ -1,11 +1,11 @@
 ---
-- name: Create the system groups
+- name: Create the storm system group
   group:
     name: "{{ storm_system_group_name }}"
     state: present
     system: yes
 
-- name: Create system users
+- name: Create storm system user
   user:
     name: "{{ storm_system_user_name }}"
     group: "{{ storm_system_group_name }}"
@@ -25,7 +25,7 @@
     creates: "/opt/apache-storm-{{ storm_version }}"
     remote_src: yes
 
-- name: Create storm symbolic link
+- name: Create storm symbolic link on /opt/storm
   file:
     src: "/opt/apache-storm-{{ storm_version }}"
     dest: "/opt/storm"
