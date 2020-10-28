@@ -25,16 +25,6 @@
       service: "logviewer"
   register: storm_config
 
-- name: Start {{item}} service 
-  systemd:
-    state: started
-    name: "{{ item }}.service"
-    daemon_reload: yes
-    enabled: yes 
-  with_items:
-    - storm-logviewer
-    - storm-supervisor
-
 - name: Restart {{item}} service 
   systemd:
     state: restarted
@@ -45,3 +35,13 @@
     - storm-logviewer
     - storm-supervisor
   when: storm_config.changed
+
+- name: Start {{item}} service 
+  systemd:
+    state: started
+    name: "{{ item }}.service"
+    daemon_reload: yes
+    enabled: yes 
+  with_items:
+    - storm-logviewer
+    - storm-supervisor
