@@ -11,6 +11,6 @@ supervisor.slots.ports:
     - {{ 6700 + n }}
 {% endfor %}
 
-{% for key, value in storm_config_options.items())%}
+{% for key, value in storm_config_options.items()%}
 {{ key }}: {{ value }}
 {% endfor %}
