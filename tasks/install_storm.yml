@@ -36,9 +36,19 @@
     dest: "/opt"
     creates: "/opt/apache-storm-{{ storm_version }}"
     remote_src: yes
+    owner: "{{ storm_system_user_name }}"
+    group: "{{ storm_system_group_name }}"
 
 - name: Create storm symbolic link on /opt/storm
   file:
     src: "/opt/apache-storm-{{ storm_version }}"
     dest: "/opt/storm"
     state: link
+
+- name: Create /opt/storm/log
+  file:
+    path: "/opt/storm/log"
+    state: directory
+    owner: "{{ storm_system_user_name }}"
+    group: "{{ storm_system_group_name }}"
+    mode: 0755
