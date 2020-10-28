@@ -45,3 +45,13 @@
   with_items:
     - storm-logviewer
     - storm-supervisor
+
+- name: Open ports in firewalld in RedHat/CentOS
+  firewalld:
+    port: "6700-6800/tcp"
+    permanent: true
+    state: enabled
+    zone: public
+    immediate: true
+  when: ansible_os_family == "RedHat"
+  ignore_errors: yes

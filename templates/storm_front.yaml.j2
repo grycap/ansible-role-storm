@@ -4,7 +4,7 @@ storm.log.dir: "/opt/storm/log"
 storm.zookeeper.servers:
     - "localhost"
 worker.heap.memory.mb: 5000
-supervisor.slots.ports:
-{% for n in range(0, num_supervisors|int)%}
-    - {{ 6700 + n }}
+
+{% for key, value in storm_config_options.items())%}
+{{ key }}: {{ value }}
 {% endfor %}

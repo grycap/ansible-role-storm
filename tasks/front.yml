@@ -58,13 +58,17 @@
 
 - name: Open ports in firewalld in RedHat/CentOS
   firewalld:
-    port: 8080/tcp
+    port: "{{ item }}"
     permanent: true
     state: enabled
     zone: public
     immediate: true
   when: ansible_os_family == "RedHat"
   ignore_errors: yes
+  with_items:
+    - 2181/tcp
+    - 6627/tcp
+    - 8080/tcp
 
 - name: reload service firewalld
   systemd:

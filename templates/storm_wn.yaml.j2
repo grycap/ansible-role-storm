@@ -6,3 +6,11 @@ storm.zookeeper.servers:
 nimbus.seeds: ["{{ storm_front_end_ip }}"]
 storm.local.hostname: "{{ ansible_hostname }}"
 worker.heap.memory.mb: 5000
+supervisor.slots.ports:
+{% for n in range(0, num_supervisors|int)%}
+    - {{ 6700 + n }}
+{% endfor %}
+
+{% for key, value in storm_config_options.items())%}
+{{ key }}: {{ value }}
+{% endfor %}
