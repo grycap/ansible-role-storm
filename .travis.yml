@@ -6,6 +6,13 @@ sudo: required
 language: python
 python: "2.7"
 
+jobs:
+  include:
+  - name: "Front test"
+    env: NODE_TYPE=front
+  - name: "WN test"
+    env: NODE_TYPE=wn
+
 before_install:
  - sudo apt-get update -qq
 
@@ -29,7 +36,7 @@ script:
   - sudo ansible-playbook tests/test.yml -i tests/inventory --syntax-check
 
   # Basic role check
-  - sudo ansible-playbook tests/test.yml -i tests/inventory
+  - sudo ansible-playbook tests/test.yml -i tests/inventory -e storm_type_of_node=$NODE_TYPE
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
