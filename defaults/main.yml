@@ -1,9 +1,14 @@
 ---
+zk_version: "3.6.2"
+zk_download_mirror: "https://archive.apache.org/dist/zookeeper"
+zk_system_user_name: zookeeper
+zk_system_group_name: zookeeper
+
 storm_download_mirror: "http://apache.rediris.es/storm"
-storm_version: "1.2.1"
-## System info
+storm_version: "2.2.0"
+num_supervisors: 1
+storm_type_of_node: front # front or wn
 storm_system_user_name: storm
 storm_system_group_name: storm
-storm_system_comment: Storm system user
-storm_system_shell: /bin/false
-storm_system_user_home: "/var/lib/{{ storm_system_user_name }}"
+storm_config_options: {}
+storm_front_end_ip: 127.0.0.1

@@ -1,0 +1,10 @@
+nimbus.host: "{{ ansible_hostname }}"
+storm.local.dir: "/opt/storm/local"
+storm.log.dir: "/opt/storm/log"
+storm.zookeeper.servers:
+    - "localhost"
+worker.heap.memory.mb: 5000
+
+{% for key, value in storm_config_options.items()%}
+{{ key }}: {{ value }}
+{% endfor %}

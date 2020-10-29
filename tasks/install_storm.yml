@@ -1,0 +1,62 @@
+---
+- name: Create the storm system group
+  group:
+    name: "{{ storm_system_group_name }}"
+    state: present
+    system: yes
+
+- name: Create storm system user
+  user:
+    name: "{{ storm_system_user_name }}"
+    group: "{{ storm_system_group_name }}"
+    system: yes
+    createhome: no
+
+- name: Install Java 8 in Ubuntu/Debian
+  apt:
+    name: openjdk-8-jdk
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install Java 8 in RedHat/CentOS
+  yum:
+    name: java-1.8.0-openjdk
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Download storm
+  get_url:
+    url: "{{storm_download_mirror}}/apache-storm-{{ storm_version }}/apache-storm-{{ storm_version }}.tar.gz"
+    dest: "/tmp/apache-storm-{{ storm_version }}.tar.gz"
+    mode: 0440
+
+- name: Unarchive storm
+  unarchive:
+    src: "/tmp/apache-storm-{{ storm_version }}.tar.gz"
+    dest: "/opt"
+    creates: "/opt/apache-storm-{{ storm_version }}"
+    remote_src: yes
+    owner: "{{ storm_system_user_name }}"
+    group: "{{ storm_system_group_name }}"
+
+- name: Create storm symbolic link on /opt/storm
+  file:
+    src: "/opt/apache-storm-{{ storm_version }}"
+    dest: "/opt/storm"
+    state: link
+
+- name: Create /opt/storm/log
+  file:
+    path: "/opt/storm/log"
+    state: directory
+    owner: "{{ storm_system_user_name }}"
+    group: "{{ storm_system_group_name }}"
+    mode: 0755
+
+- name: Create /opt/storm/local
+  file:
+    path: "/opt/storm/local"
+    state: directory
+    owner: "{{ storm_system_user_name }}"
+    group: "{{ storm_system_group_name }}"
+    mode: 0755
